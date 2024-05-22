@@ -13,7 +13,7 @@
   {
     "policyName": "packages",
     "definitionName": "lockStepVersion",
-    "version": "1.0.4-8", /** 领域内均会使用此版本,忽略项目内版本,该值初始化后不需要手动维护 */
+    "version": "1.0.4-9", /** 领域内均会使用此版本,忽略项目内版本,该值初始化后不需要手动维护 */
     "nextBump": "prerelease" /** prerelease", "release", "minor", "patch", "major" */
   }
 ]
