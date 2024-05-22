@@ -47,7 +47,7 @@ jobs:
           key: pnpm-cache-${{ runner.os }}-${{ hashFiles('**/pnpm-lock.yaml') }}
       # 变更检查
       - name: Verify Change Logs
-        run: node common/scripts/install-run-rush.js change --verify
+        run: node common/scripts/install-run-rush.js change --overwrite --verify
       # rush 安装
       - name: Rush Install
         env:
