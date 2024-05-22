@@ -1,0 +1,81 @@
+name: CI
+on:
+  push:
+    branches: ['master']
+  pull_request:
+    branches: ['master']
+# Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
+permissions:
+  contents: write
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      # 签出分支
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 2
+      # 设置git
+      - name: Git config user
+        uses: snow-actions/git-config-user@v1.0.0
+        with:
+          name: khalidzk
+          email: khalidlife@163.com
+      # 设置 node
+      - uses: actions/setup-node@v3
+        with:
+          node-version: v18.20.2
+      # 设置pnpm
+      - uses: pnpm/action-setup@v2
+        with:
+          version: 8.7.6
+      # 设置 rush 缓存文件
+      - name: Cache Rush
+        uses: actions/cache@v2
+        with:
+          path: |
+            common/temp/install-run
+            ~/.rush
+          key: Rush-cache-${{ hashFiles('rush.json') }}
+      # 设置 pnpm 缓存文件
+      - name: Cache pnpm
+        uses: actions/cache@v3
+        with:
+          path: |
+            common/temp/pnpm-store
+          #            ~/.cache/Cypress
+          key: pnpm-cache-${{ runner.os }}-${{ hashFiles('**/pnpm-lock.yaml') }}
+      # 变更检查
+      - name: Verify Change Logs
+        run: node common/scripts/install-run-rush.js change --verify
+      # rush 安装
+      - name: Rush Install
+        env:
+          HUSKY: 0
+        run: node common/scripts/install-run-rush.js install
+      #      - name: Rush rebuild
+      #        run: node common/scripts/install-run-rush.js rebuild --verbose --production
+      # 构建整个仓库项目
+      - name: Run rush Build
+        env:
+          NODE_ENV: production
+          NODE_OPTIONS: --max_old_space_size=8192
+        run: node common/scripts/install-run-rush.js rebuild --verbose
+      # 应用变更
+      - name: Apply change
+        env:
+          HUSKY: 0
+        run: node common/scripts/install-run-rush.js version --bump --target-branch master
+      # changelog变更
+      - name: changelog change
+        env:
+          HUSKY: 0
+        run: node common/scripts/install-run-rush.js changefiles
+      # 发布变更包-打包模式 github
+      - name: Publish Github
+        run: node common/scripts/install-run-rush.js publish --pack --include-all --publish --apply-git-tags-on-pack
+      # 发布变更包-发布模式 npm
+      - name: Publish
+        env:
+          NPM_AUTH_TOKEN: ${{secrets.NPM_AUTH_TOKEN}}
+        run: node common/scripts/install-run-rush.js publish --publish --include-all

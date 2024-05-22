@@ -1,0 +1,19 @@
+/**
+ * This is configuration file is used for advanced publishing configurations with Rush.
+ * More documentation is available on the Rush website: https://rushjs.io
+ */
+
+/**
+ * A list of version policy definitions.  A "version policy" is a custom package versioning
+ * strategy that affects "rush change", "rush version", and "rush publish".  The strategy applies
+ * to a set of projects that are specified using the "versionPolicyName" field in rush.json.
+ */
+[
+  /** 声明这个策略下的项目同步发布,版本一致,适用于一组相同领域内的业务包,领域内版本一致,总是共同发布更新 */
+  {
+    "policyName": "packages",
+    "definitionName": "lockStepVersion",
+    "version": "1.0.4-7", /** 领域内均会使用此版本,忽略项目内版本,该值初始化后不需要手动维护 */
+    "nextBump": "prerelease" /** prerelease", "release", "minor", "patch", "major" */
+  }
+]
