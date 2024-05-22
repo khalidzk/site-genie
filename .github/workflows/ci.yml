@@ -68,9 +68,9 @@ jobs:
         run: node common/scripts/install-run-rush.js version --bump --target-branch master
       # 发布变更包-打包模式 github
       - name: Publish Github
-        run: node common/scripts/install-run-rush.js publish --pack --include-all --publish --apply-git-tags-on-pack
+        run: node common/scripts/install-run-rush.js publish --regenerate-changelogs --pack --include-all --publish --apply-git-tags-on-pack
       # 发布变更包-发布模式 npm
       - name: Publish
         env:
           NPM_AUTH_TOKEN: ${{secrets.NPM_AUTH_TOKEN}}
-        run: node common/scripts/install-run-rush.js publish --publish --include-all --regenerate-changelogs
+        run: node common/scripts/install-run-rush.js publish --publish --include-all
