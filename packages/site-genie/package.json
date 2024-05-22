@@ -1,6 +1,6 @@
 {
   "name": "@site-genie/site-genie",
-  "version": "1.0.4-10",
+  "version": "1.0.4-11",
   "description": "",
   "main": "dist/index.js",
   "module": "dist/index.js",
